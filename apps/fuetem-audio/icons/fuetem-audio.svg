@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#16213e"/>
+    </linearGradient>
+    <linearGradient id="wave" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f472b6"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+    <linearGradient id="scissors" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect x="4" y="4" width="120" height="120" rx="22" ry="22" fill="url(#bg)" stroke="#2d2d5e" stroke-width="1.5"/>
+  <!-- Waveform bars -->
+  <g filter="url(#glow)" fill="url(#wave)" opacity="0.9">
+    <rect x="16" y="52" width="8" height="24" rx="4"/>
+    <rect x="28" y="40" width="8" height="48" rx="4"/>
+    <rect x="40" y="46" width="8" height="36" rx="4"/>
+    <rect x="52" y="32" width="8" height="64" rx="4"/>
+    <rect x="64" y="42" width="8" height="44" rx="4"/>
+    <rect x="76" y="50" width="8" height="28" rx="4"/>
+    <rect x="88" y="38" width="8" height="52" rx="4"/>
+    <rect x="100" y="54" width="8" height="20" rx="4"/>
+  </g>
+  <!-- Trim scissors line -->
+  <line x1="14" y1="100" x2="114" y2="100" stroke="url(#scissors)" stroke-width="2.5" stroke-dasharray="6,4" filter="url(#glow)" opacity="0.7"/>
+  <!-- Scissors blades simplified -->
+  <g filter="url(#glow)" opacity="0.85">
+    <circle cx="110" cy="100" r="5" fill="none" stroke="url(#scissors)" stroke-width="2.5"/>
+    <line x1="100" y1="92" x2="112" y2="100" stroke="url(#scissors)" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="100" y1="108" x2="112" y2="100" stroke="url(#scissors)" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+</svg>

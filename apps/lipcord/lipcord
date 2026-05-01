@@ -1,0 +1,150 @@
+#!/usr/bin/env python3
+"""LipCord - Physical security failsafe for Linux (GUI)"""
+
+import tkinter as tk
+import subprocess
+import os
+import signal
+
+RUNTIME_DIR = os.environ.get("XDG_RUNTIME_DIR", "/tmp")
+PIDFILE = os.path.join(RUNTIME_DIR, "lipcord.pid")
+DAEMON = os.path.expanduser("~/.local/bin/lipcord-daemon")
+
+
+def is_daemon_running():
+    """Check if the LipCord daemon is currently running."""
+    if not os.path.exists(PIDFILE):
+        return False
+    try:
+        with open(PIDFILE) as f:
+            pid = int(f.read().strip())
+        os.kill(pid, 0)
+        return True
+    except (ProcessNotFoundError, ValueError, PermissionError, FileNotFoundError):
+        # Stale PID file
+        try:
+            os.remove(PIDFILE)
+        except OSError:
+            pass
+        return False
+
+
+def is_usb_present():
+    """Check if a USB drive labeled LipCord (case-insensitive) is attached."""
+    try:
+        result = subprocess.run(
+            ["lsblk", "-o", "LABEL", "-rn"],
+            capture_output=True, text=True, timeout=5
+        )
+        for line in result.stdout.splitlines():
+            if line.strip().lower() == "lipcord":
+                return True
+    except (subprocess.TimeoutExpired, FileNotFoundError):
+        pass
+    return False
+
+
+class LipCordApp:
+    def __init__(self):
+        self.root = tk.Tk()
+        self.root.title("LipCord")
+        self.root.resizable(False, False)
+
+        frame = tk.Frame(self.root, padx=20, pady=15)
+        frame.pack()
+
+        title = tk.Label(frame, text="LipCord", font=("sans-serif", 16, "bold"))
+        title.pack(pady=(0, 10))
+
+        self.status_label = tk.Label(
+            frame, text="", font=("sans-serif", 11), width=28, anchor="center"
+        )
+        self.status_label.pack(pady=(0, 5))
+
+        self.usb_label = tk.Label(
+            frame, text="", font=("sans-serif", 9), fg="#666666"
+        )
+        self.usb_label.pack(pady=(0, 12))
+
+        btn_frame = tk.Frame(frame)
+        btn_frame.pack()
+
+        self.start_btn = tk.Button(
+            btn_frame, text="START", width=10, font=("sans-serif", 11, "bold"),
+            fg="white", bg="#2e7d32", activebackground="#1b5e20",
+            command=self.start_daemon
+        )
+        self.start_btn.pack(side=tk.LEFT, padx=5)
+
+        self.stop_btn = tk.Button(
+            btn_frame, text="STOP", width=10, font=("sans-serif", 11, "bold"),
+            fg="white", bg="#c62828", activebackground="#b71c1c",
+            command=self.stop_daemon
+        )
+        self.stop_btn.pack(side=tk.LEFT, padx=5)
+
+        close_btn = tk.Button(
+            frame, text="Close", width=22, font=("sans-serif", 9),
+            command=self.root.destroy
+        )
+        close_btn.pack(pady=(12, 0))
+
+        self.refresh_state()
+        self.root.mainloop()
+
+    def refresh_state(self):
+        """Update UI to reflect current daemon and USB state."""
+        running = is_daemon_running()
+        usb = is_usb_present()
+
+        if running:
+            self.status_label.config(text="Armed", fg="#2e7d32")
+            self.start_btn.config(state=tk.DISABLED)
+            self.stop_btn.config(state=tk.NORMAL)
+        else:
+            self.status_label.config(text="Disarmed", fg="#c62828")
+            self.start_btn.config(state=tk.NORMAL)
+            self.stop_btn.config(state=tk.DISABLED)
+
+        if usb:
+            self.usb_label.config(text="USB: LipCord connected")
+        else:
+            self.usb_label.config(text="USB: not detected")
+
+        # Poll every 2 seconds to keep state current
+        self.root.after(2000, self.refresh_state)
+
+    def start_daemon(self):
+        """Start the monitoring daemon."""
+        if is_daemon_running():
+            return
+
+        if not is_usb_present():
+            self.status_label.config(
+                text="Insert LipCord USB first", fg="#e65100"
+            )
+            return
+
+        subprocess.Popen(
+            [DAEMON],
+            start_new_session=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        self.root.after(500, self.refresh_state)
+
+    def stop_daemon(self):
+        """Stop the monitoring daemon."""
+        if not os.path.exists(PIDFILE):
+            return
+        try:
+            with open(PIDFILE) as f:
+                pid = int(f.read().strip())
+            os.kill(pid, signal.SIGTERM)
+        except (ProcessNotFoundError, ValueError, PermissionError, FileNotFoundError):
+            pass
+        self.root.after(500, self.refresh_state)
+
+
+if __name__ == "__main__":
+    LipCordApp()

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Fuetem Audio
+Comment=Audio file converter, trimmer, and player
+Exec=/home/neil/.local/bin/fuetem-audio
+Icon=fuetem-audio
+Categories=AudioVideo;Audio;
+StartupNotify=false

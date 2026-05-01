@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=EmDee Editor
+Comment=Lightweight markdown editor and viewer
+Exec=emdee-editor %f
+Icon=emdee-editor
+Terminal=false
+Type=Application
+Categories=Utility;TextEditor;
+MimeType=text/markdown;text/x-markdown;

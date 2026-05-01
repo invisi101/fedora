@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+# LipCord Daemon - Background USB monitor
+# Polls for a USB drive labeled "LipCord" (case-insensitive) and
+# locks/suspends the system when it is removed.
+# License: GPL-3.0
+
+RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp}"
+PIDFILE="$RUNTIME_DIR/lipcord.pid"
+CONFIG_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/lipcord/config"
+
+# Defaults
+LOCK=yes
+SUSPEND=yes
+POLL_INTERVAL=1
+
+# Load user config if it exists
+if [ -f "$CONFIG_FILE" ]; then
+    # shellcheck source=/dev/null
+    source "$CONFIG_FILE"
+fi
+
+cleanup() {
+    rm -f "$PIDFILE"
+    exit 0
+}
+
+trap cleanup SIGTERM SIGINT EXIT
+
+log() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') [LipCord] $1"
+}
+
+check_usb() {
+    lsblk -o LABEL -rn 2>/dev/null | grep -qi '^lipcord$'
+}
+
+lock_session() {
+    if loginctl lock-session 2>/dev/null; then
+        return 0
+    fi
+
+    if dbus-send --type=method_call --dest=org.freedesktop.ScreenSaver \
+        /org/freedesktop/ScreenSaver org.freedesktop.ScreenSaver.Lock 2>/dev/null; then
+        return 0
+    fi
+
+    local lockers=(hyprlock swaylock waylock i3lock xdg-screensaver xscreensaver-command)
+    for locker in "${lockers[@]}"; do
+        if command -v "$locker" &>/dev/null; then
+            case "$locker" in
+                xdg-screensaver)      "$locker" lock & return 0 ;;
+                xscreensaver-command) "$locker" -lock & return 0 ;;
+                *)                    "$locker" & return 0 ;;
+            esac
+        fi
+    done
+
+    log "WARNING: Could not find a screen locker"
+    return 1
+}
+
+trigger() {
+    log "LipCord USB removed! Triggering security response..."
+
+    if [ "$LOCK" = "yes" ]; then
+        log "Locking session..."
+        lock_session
+    fi
+
+    if [ "$SUSPEND" = "yes" ]; then
+        log "Suspending system..."
+        systemctl suspend
+    fi
+}
+
+# Write PID file
+echo $$ > "$PIDFILE"
+log "Daemon started (PID $$)"
+log "Config: LOCK=$LOCK SUSPEND=$SUSPEND POLL_INTERVAL=${POLL_INTERVAL}s"
+
+# Main monitoring loop
+while true; do
+    # Monitor until the drive is removed
+    while check_usb; do
+        sleep "$POLL_INTERVAL"
+    done
+
+    trigger
+
+    # After wake, wait for re-insertion before arming again
+    log "System resumed. Waiting for LipCord USB to be re-inserted..."
+    while ! check_usb; do
+        sleep "$POLL_INTERVAL"
+    done
+    log "LipCord USB re-inserted. Armed."
+done

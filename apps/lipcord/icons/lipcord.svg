@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- USB connector being ripped apart with electricity - neon edition -->
+  <defs>
+    <linearGradient id="plug1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00e5ff"/>
+      <stop offset="100%" style="stop-color:#0091ea"/>
+    </linearGradient>
+    <linearGradient id="plug2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff4081"/>
+      <stop offset="100%" style="stop-color:#f50057"/>
+    </linearGradient>
+    <linearGradient id="cableLeft" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0091ea"/>
+      <stop offset="100%" style="stop-color:#00e5ff"/>
+    </linearGradient>
+    <linearGradient id="cableRight" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f50057"/>
+      <stop offset="100%" style="stop-color:#ff4081"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffd54f"/>
+      <stop offset="40%" style="stop-color:#ffab00"/>
+      <stop offset="100%" style="stop-color:#ff8f00"/>
+    </linearGradient>
+    <linearGradient id="goldShackle" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffe082"/>
+      <stop offset="100%" style="stop-color:#ffab00"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="neonGlow">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="pinkGlow">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="blueGlow">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="goldGlow">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="512" height="512" fill="#0a0a14"/>
+  <!-- Neon radial bursts behind the break point - shifted up -->
+  <circle cx="256" cy="170" r="180" fill="#ff4081" opacity="0.06"/>
+  <circle cx="256" cy="170" r="130" fill="#00e5ff" opacity="0.08"/>
+  <circle cx="256" cy="170" r="80" fill="#e040fb" opacity="0.1"/>
+  <!-- Left cable - neon blue -->
+  <path d="M0,165 Q60,165 130,145" stroke="url(#cableLeft)" stroke-width="26" fill="none" stroke-linecap="round" filter="url(#blueGlow)"/>
+  <!-- Left USB connector (female/port side) -->
+  <g transform="translate(145,130) rotate(-12)" filter="url(#blueGlow)">
+    <rect x="0" y="-28" width="85" height="68" rx="8" fill="url(#plug1)" stroke="#00e5ff" stroke-width="3"/>
+    <rect x="70" y="-20" width="18" height="52" rx="3" fill="#006064"/>
+    <!-- Port hole -->
+    <rect x="12" y="-14" width="50" height="40" rx="4" fill="#0a0a14" stroke="#00bcd4" stroke-width="1"/>
+    <!-- Inner port details -->
+    <rect x="20" y="-4" width="10" height="6" rx="1" fill="#00e5ff" opacity="0.5"/>
+    <rect x="20" y="8" width="10" height="6" rx="1" fill="#00e5ff" opacity="0.5"/>
+  </g>
+  <!-- Right cable - neon pink -->
+  <path d="M380,195 Q440,180 512,178" stroke="url(#cableRight)" stroke-width="26" fill="none" stroke-linecap="round" filter="url(#pinkGlow)"/>
+  <!-- Right USB connector (male/plug side) -->
+  <g transform="translate(282,170) rotate(10)" filter="url(#pinkGlow)">
+    <rect x="0" y="-28" width="85" height="68" rx="8" fill="url(#plug2)" stroke="#ff4081" stroke-width="3"/>
+    <!-- Plug prong -->
+    <rect x="-22" y="-18" width="26" height="48" rx="3" fill="#ff80ab" stroke="#ff4081" stroke-width="2"/>
+    <!-- Contact pins -->
+    <rect x="-16" y="-6" width="12" height="7" rx="1" fill="#ffffff"/>
+    <rect x="-16" y="8" width="12" height="7" rx="1" fill="#ffffff"/>
+    <!-- Drive details -->
+    <rect x="14" y="-14" width="10" height="6" rx="1" fill="#ff4081" opacity="0.5"/>
+    <rect x="14" y="-2" width="10" height="6" rx="1" fill="#ff4081" opacity="0.5"/>
+    <rect x="14" y="10" width="10" height="6" rx="1" fill="#ff4081" opacity="0.5"/>
+  </g>
+  <!-- Lightning/electricity at break point - shifted up -->
+  <g filter="url(#neonGlow)">
+    <!-- Main bolt -->
+    <polygon points="252,85 236,155 258,150 228,240 278,160 254,166 274,90" fill="#e040fb"/>
+    <!-- Second bolt -->
+    <polygon points="265,105 258,145 270,142 250,200 275,148 264,152 272,110" fill="#ea80fc"/>
+    <!-- Spark lines -->
+    <line x1="238" y1="140" x2="195" y2="110" stroke="#e040fb" stroke-width="4" stroke-linecap="round"/>
+    <line x1="272" y1="185" x2="315" y2="215" stroke="#e040fb" stroke-width="4" stroke-linecap="round"/>
+    <line x1="230" y1="190" x2="190" y2="220" stroke="#ea80fc" stroke-width="3" stroke-linecap="round"/>
+    <line x1="280" y1="145" x2="320" y2="115" stroke="#ea80fc" stroke-width="3" stroke-linecap="round"/>
+    <line x1="245" y1="210" x2="220" y2="240" stroke="#e040fb" stroke-width="2" stroke-linecap="round"/>
+    <line x1="265" y1="120" x2="300" y2="95" stroke="#e040fb" stroke-width="2" stroke-linecap="round"/>
+    <!-- Sparks -->
+    <circle cx="195" cy="110" r="6" fill="#e040fb"/>
+    <circle cx="315" cy="215" r="5" fill="#e040fb"/>
+    <circle cx="190" cy="220" r="5" fill="#ea80fc"/>
+    <circle cx="320" cy="115" r="6" fill="#ea80fc"/>
+    <circle cx="256" cy="80" r="4" fill="#ffffff"/>
+    <circle cx="248" cy="245" r="4" fill="#ffffff"/>
+  </g>
+  <!-- Motion lines showing separation - neon -->
+  <line x1="120" y1="100" x2="60" y2="60" stroke="#00e5ff" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+  <line x1="110" y1="125" x2="45" y2="100" stroke="#00e5ff" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+  <line x1="125" y1="75" x2="80" y2="40" stroke="#00e5ff" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+  <line x1="390" y1="240" x2="450" y2="280" stroke="#ff4081" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+  <line x1="400" y1="215" x2="465" y2="240" stroke="#ff4081" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+  <line x1="385" y1="265" x2="435" y2="300" stroke="#ff4081" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+  <!-- Large gold padlock -->
+  <g transform="translate(256, 390)" filter="url(#goldGlow)">
+    <!-- Shackle -->
+    <path d="M-30,-30 L-30,-50 Q-30,-80 0,-80 Q30,-80 30,-50 L30,-30"
+          fill="none" stroke="url(#goldShackle)" stroke-width="10" stroke-linecap="round"/>
+    <!-- Lock body -->
+    <rect x="-42" y="-35" width="84" height="65" rx="10" fill="url(#goldGrad)" stroke="#ff8f00" stroke-width="2"/>
+    <!-- Highlight on lock body -->
+    <rect x="-36" y="-30" width="30" height="55" rx="6" fill="#ffe082" opacity="0.25"/>
+    <!-- Keyhole -->
+    <circle cx="0" cy="-10" r="11" fill="#0a0a14"/>
+    <rect x="-5" y="-10" width="10" height="22" rx="2" fill="#0a0a14"/>
+  </g>
+  <!-- LOCKED text - neon pink -->
+  <g filter="url(#pinkGlow)">
+    <text x="256" y="488" text-anchor="middle" fill="#ff4081" font-family="monospace" font-size="50" font-weight="bold" letter-spacing="10">LOCKED</text>
+  </g>
+</svg>

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-# Fedora compatibility setup for ~/dev apps.
-# Enables RPM Fusion Free, installs all app dependencies,
-# installs required fonts, and patches known Fedora incompatibilities.
+# Fedora setup: enables RPM Fusion Free, installs all system packages,
+# and deploys all bundled apps from this repo.
 #
 # Usage: sudo bash setup.sh
 
@@ -25,8 +24,6 @@ info "Fedora ${VERSION_ID:-?} detected."
 # Resolve the real user's home directory (SUDO_USER is set when using sudo).
 REAL_USER="${SUDO_USER:-$USER}"
 REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
-DEV_DIR="${DEV_DIR:-$REAL_HOME/dev}"
-info "Dev directory: $DEV_DIR"
 
 # ── RPM Fusion Free ───────────────────────────────────────────────────────────
 
@@ -104,67 +101,64 @@ section "Font cache"
 fc-cache -f
 ok "Font cache updated."
 
-# ── Patch: fuetem-imager.py watermark font path ───────────────────────────────
-# The app tries Arch and Debian font paths and falls back to a tiny default
-# font. On Fedora, DejaVu fonts live in /usr/share/fonts/dejavu-sans-fonts/.
+# ── App installation ──────────────────────────────────────────────────────────
+# run_as_user: subshell in app dir as REAL_USER with HOME set correctly.
+#   Used for apps installing to ~/.local (user-space).
+# run_as_root: subshell in app dir as root with HOME set to REAL_HOME so
+#   desktop entries land in the real user's home, not /root.
 
-section "Patching fuetem-imager.py watermark font"
+run_as_user() {
+    local app_dir="$1"
+    (cd "$app_dir" && sudo -u "$REAL_USER" HOME="$REAL_HOME" bash install.sh)
+}
 
-FUETEM_IMAGER="$DEV_DIR/fuetem-imager/fuetem-imager.py"
+run_as_root() {
+    local app_dir="$1"
+    (cd "$app_dir" && HOME="$REAL_HOME" bash install.sh)
+}
 
-if [[ ! -f "$FUETEM_IMAGER" ]]; then
-    warn "fuetem-imager.py not found at $FUETEM_IMAGER — skipping."
-else
-    python3 - "$FUETEM_IMAGER" <<'PYEOF'
-import sys
+section "yt-snatcher"
+run_as_user "$SCRIPT_DIR/apps/yt-snatcher"
 
-path = sys.argv[1]
-with open(path, 'r') as f:
-    content = f.read()
+section "pikapika"
+run_as_user "$SCRIPT_DIR/apps/pikapika"
 
-FEDORA_FONT = '/usr/share/fonts/dejavu-sans-fonts/DejaVuSans-Bold.ttf'
-MARKER = FEDORA_FONT
+section "LipCord"
+run_as_user "$SCRIPT_DIR/apps/lipcord"
 
-if MARKER in content:
-    print('Already patched — skipping.')
-    sys.exit(0)
+section "emdee-editor"
+run_as_root "$SCRIPT_DIR/apps/emdee-editor"
 
-OLD = '                font = ImageFont.load_default()'
-NEW = (
-    '                try:\n'
-    '                    font = ImageFont.truetype(\n'
-    "                        '" + FEDORA_FONT + "', font_size)\n"
-    '                except Exception:\n'
-    '                    font = ImageFont.load_default()'
-)
+section "emdee-viewer"
+run_as_root "$SCRIPT_DIR/apps/emdee-viewer"
 
-if OLD in content:
-    with open(path, 'w') as f:
-        f.write(content.replace(OLD, NEW, 1))
-    print('Patched successfully.')
-else:
-    print('WARNING: Expected pattern not found — check fuetem-imager.py indentation manually.')
-PYEOF
-    ok "fuetem-imager.py font patch done."
-fi
+section "fuetem-audio"
+run_as_user "$SCRIPT_DIR/apps/fuetem-audio"
 
-# ── Fix: runclam.sh ClamAV user ───────────────────────────────────────────────
-# Fedora uses 'clamupdate' as the ClamAV system user, not 'clamav'.
+section "fuetem-imager"
+run_as_root "$SCRIPT_DIR/apps/fuetem-imager"
 
-section "Fixing runclam.sh"
+# ── neils-scripts ─────────────────────────────────────────────────────────────
 
-RUNCLAM="$DEV_DIR/neils-scripts/runclam.sh"
+section "neils-scripts"
+SCRIPTS_BIN="$REAL_HOME/.local/bin"
+sudo -u "$REAL_USER" mkdir -p "$SCRIPTS_BIN"
+install -Dm755 "$SCRIPT_DIR/apps/neils-scripts/runclam.sh" "$SCRIPTS_BIN/runclam"
+install -Dm755 "$SCRIPT_DIR/apps/neils-scripts/url-maintenance.sh" "$SCRIPTS_BIN/url-maintenance"
+chown "$REAL_USER:$REAL_USER" "$SCRIPTS_BIN/runclam" "$SCRIPTS_BIN/url-maintenance"
+ok "Scripts installed to $SCRIPTS_BIN/"
 
-if [[ ! -f "$RUNCLAM" ]]; then
-    warn "runclam.sh not found at $RUNCLAM — skipping."
-else
-    cp "$RUNCLAM" "${RUNCLAM}.bak"
-    cp "$SCRIPT_DIR/fixes/runclam.sh" "$RUNCLAM"
-    ok "runclam.sh replaced (backup saved as runclam.sh.bak)."
-fi
+# ── firefox-settings ─────────────────────────────────────────────────────────
+# Interactive — must be run separately as yourself after Firefox has been
+# opened at least once to create a profile directory.
+
+section "Firefox settings"
+warn "Firefox settings require manual setup (interactive profile selection)."
+info "Run as yourself (not sudo) after first launching Firefox:"
+info "  cd $SCRIPT_DIR/apps/firefox-settings && bash install.sh"
 
 # ── Done ──────────────────────────────────────────────────────────────────────
 
 section "Setup complete"
-ok "All Fedora compatibility fixes applied."
-info "You can now run each app's own install.sh to deploy them."
+ok "All apps installed."
+info "Log out and back in to refresh PATH and icon caches."
