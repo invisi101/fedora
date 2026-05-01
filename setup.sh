@@ -263,6 +263,18 @@ else
     ok "Default shell set to zsh (takes effect on next login)."
 fi
 
+# ── Claude Code ───────────────────────────────────────────────────────────────
+
+section "Claude Code"
+if command -v claude &>/dev/null; then
+    ok "Claude Code already installed ($(claude --version 2>/dev/null | head -1))."
+else
+    info "Installing Claude Code..."
+    sudo -u "$REAL_USER" HOME="$REAL_HOME" \
+        sh -c "$(curl -fsSL https://claude.ai/install.sh)"
+    ok "Claude Code installed."
+fi
+
 # ── firefox-settings ─────────────────────────────────────────────────────────
 # Interactive — must be run separately as yourself after Firefox has been
 # opened at least once to create a profile directory.
