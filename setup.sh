@@ -321,6 +321,10 @@ sudo -u "$REAL_USER" mkdir -p "$MANGO_DIR/dms"
 deploy_config "$SCRIPT_DIR/configs/mango/config.conf"  "$MANGO_DIR/config.conf"
 deploy_config "$SCRIPT_DIR/configs/mango/binds.conf"   "$MANGO_DIR/binds.conf"
 
+# autostart wrapper — uses runtime $HOME, no envsubst needed
+install -Dm755 "$SCRIPT_DIR/configs/mango/autostart.sh" "$MANGO_DIR/autostart.sh"
+chown "$REAL_USER:$REAL_USER" "$MANGO_DIR/autostart.sh"
+
 # screensaver text — no $HOME expansion needed
 install -Dm644 "$SCRIPT_DIR/configs/mango/screensaver.txt" "$MANGO_DIR/screensaver.txt"
 chown "$REAL_USER:$REAL_USER" "$MANGO_DIR/screensaver.txt"
