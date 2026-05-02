@@ -161,8 +161,6 @@ alias matrix="unimatrix -s 95"
 alias rg='rg --smart-case'
 alias ufwlog='journalctl -k --grep="UFW" -f'
 alias cx='claude --allowedTools Read Glob Grep WebFetch WebSearch Agent'
-alias pullmygit='~/.local/bin/pullmygit'
-alias pushmygit='~/.local/bin/pushmygit'
 alias nb=newsboat
 # updateffx removed — Firefox profile path is machine-specific; set manually after first launch
 alias runclam='~/.local/bin/runclam'

@@ -626,16 +626,12 @@ run_as_root "$SCRIPT_DIR/apps/fuetem-imager"
 section "neils-scripts"
 SCRIPTS_BIN="$REAL_HOME/.local/bin"
 sudo -u "$REAL_USER" mkdir -p "$SCRIPTS_BIN"
-for script in runclam.sh url-maintenance.sh pullmygit.sh pushmygit.sh; do
+for script in runclam.sh url-maintenance.sh; do
     base="${script%.sh}"
     install -Dm755 "$SCRIPT_DIR/apps/neils-scripts/$script" "$SCRIPTS_BIN/$base"
     chown "$REAL_USER:$REAL_USER" "$SCRIPTS_BIN/$base"
 done
 ok "Scripts installed to $SCRIPTS_BIN/"
-
-install -Dm644 "$SCRIPT_DIR/configs/mygitrepos" "$REAL_HOME/.config/mygitrepos"
-chown "$REAL_USER:$REAL_USER" "$REAL_HOME/.config/mygitrepos"
-ok "mygitrepos deployed."
 
 # ── Firefox settings ──────────────────────────────────────────────────────────
 # Interactive — run separately as yourself after Firefox has been opened once.
