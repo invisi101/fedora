@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Launch the screensaver in a fullscreen ghostty terminal.
+# Adapted from Omarchy's screensaver for MangoWM.
+
+export PATH="$HOME/.local/bin:$PATH"
+
+if ! command -v tte &>/dev/null; then
+  notify-send "Screensaver" "tte not installed: pipx install terminaltexteffects"
+  exit 1
+fi
+
+pgrep -f org.omarchy.screensaver && exit 0
+
+ghostty --class=org.omarchy.screensaver \
+  --font-size=18 \
+  --window-padding-x=0 \
+  --window-padding-y=0 \
+  --background=000000 \
+  --window-decoration=false \
+  -e mango-screensaver &

@@ -1,0 +1,6 @@
+#!/bin/sh
+mmsg -d setoption,unfocused_opacity,1.0
+mmsg -d setoption,blur_layer,0
+grim -g "$(slurp)" - | satty -f -
+mmsg -d setoption,blur_layer,1
+mmsg -d setoption,unfocused_opacity,0.5
