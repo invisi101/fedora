@@ -144,6 +144,8 @@ install_pkgs \
     firefox torbrowser-launcher brave-browser \
     `# ── Media ─────────────────────────────────` \
     mpv \
+    `# ── Bluetooth / power / login manager ─────` \
+    bluez power-profiles-daemon sddm \
     `# ── Security ──────────────────────────────` \
     ufw firejail lynis rkhunter gitleaks \
     `# ── Dev tools ─────────────────────────────` \
@@ -604,10 +606,41 @@ warn "Firefox settings require manual setup (interactive profile selection)."
 info "Run as yourself (not sudo) after first launching Firefox:"
 info "  cd $SCRIPT_DIR/apps/firefox-settings && bash install.sh"
 
+# ── System services ───────────────────────────────────────────────────────────
+
+section "System services"
+systemctl enable bluetooth.service
+systemctl enable power-profiles-daemon.service
+ok "bluetooth + power-profiles-daemon enabled."
+
+# ── SDDM autologin to mango ───────────────────────────────────────────────────
+
+section "SDDM autologin"
+mkdir -p /etc/sddm.conf.d
+cat > /etc/sddm.conf.d/autologin.conf <<EOF
+[Autologin]
+User=$REAL_USER
+Session=mango.desktop
+EOF
+chmod 644 /etc/sddm.conf.d/autologin.conf
+
+# Disable any conflicting display managers that may have been installed.
+for dm in gdm lightdm; do
+    if systemctl is-enabled "$dm.service" &>/dev/null; then
+        info "Disabling $dm.service to avoid conflict with SDDM."
+        systemctl disable "$dm.service" || true
+    fi
+done
+
+systemctl enable sddm.service
+# Boot to graphical target so SDDM actually runs.
+systemctl set-default graphical.target
+ok "SDDM autologin enabled — boots straight into mango as $REAL_USER."
+
 # ── Done ──────────────────────────────────────────────────────────────────────
 
 section "Setup complete"
-ok "All packages installed, MangoWM + DMS built, configs deployed."
+ok "All packages installed, MangoWM + DMS deployed, configs in place."
 info "Reboot now:  sudo reboot"
-info "Then log into TTY and start Mango:  mango"
+info "SDDM will autologin and launch mango."
 info "If DMS does not appear, check:  cat ~/.config/mango/autostart.log"

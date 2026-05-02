@@ -60,10 +60,8 @@ environment needed — this script provides one.
    sudo reboot
    ```
 
-7. **Log into TTY** again, then start MangoWM:
-   ```sh
-   mango
-   ```
+7. **Boot straight into MangoWM** — SDDM autologins as your user and
+   launches the mango session. No manual `mango` command needed.
 
 ## Post-install (manual)
 
