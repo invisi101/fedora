@@ -99,10 +99,6 @@ alias ping='ping -c 10'
 alias less='less -R'
 alias cls='clear'
 alias multitail='multitail --no-repeat -c'
-alias vi='nvim'
-alias vim='nvim'
-alias svi='sudo vi'
-alias vis='nvim "+set si"'
 # yayf removed — yay is Arch-only (AUR helper)
 
 # Change directory aliases

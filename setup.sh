@@ -139,7 +139,7 @@ install_pkgs \
     `# ── File management ───────────────────────` \
     yazi nautilus ncdu fd-find rsync \
     `# ── Editors ───────────────────────────────` \
-    neovim nano mousepad \
+    nano mousepad \
     `# ── Browsers ──────────────────────────────` \
     firefox torbrowser-launcher brave-browser \
     `# ── Media ─────────────────────────────────` \
@@ -508,13 +508,6 @@ for f in "$SCRIPT_DIR/configs/yazi/flavors/noctalia.yazi/"*; do
 done
 chown -R "$REAL_USER:$REAL_USER" "$YAZI_DIR"
 ok "yazi config deployed."
-
-section "nvim config"
-NVIM_DIR="$REAL_HOME/.config/nvim/lua/plugins"
-sudo -u "$REAL_USER" mkdir -p "$NVIM_DIR"
-install -Dm644 "$SCRIPT_DIR/configs/nvim/lua/plugins/dankcolors.lua" "$NVIM_DIR/dankcolors.lua"
-chown -R "$REAL_USER:$REAL_USER" "$REAL_HOME/.config/nvim"
-ok "nvim config deployed."
 
 section "starship config"
 install -Dm644 "$SCRIPT_DIR/configs/starship/starship.toml" "$REAL_HOME/.config/starship.toml"

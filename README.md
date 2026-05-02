@@ -13,7 +13,7 @@ configured MangoWM + DankMaterialShell desktop in one command.
 - Installs DankMaterialShell (DMS) from the avengemedia/dms COPR
 - Configures UFW (replaces firewalld), Flatpak + Flathub
 - Deploys configs for: mango, kitty, alacritty, foot, ghostty, fastfetch,
-  btop, cava, yazi, nvim, starship, newsboat, easyeffects, thefuck, zsh
+  btop, cava, yazi, starship, newsboat, easyeffects, thefuck, zsh
 - Installs Oh My Zsh + Powerlevel10k + plugins, JetBrainsMono Nerd Font
 - Installs Claude Code
 - Builds and installs all bundled apps under `apps/`
@@ -89,7 +89,7 @@ environment needed — this script provides one.
 │   ├── zsh/          .zshrc, .p10k.zsh
 │   ├── fonts/        JetBrainsMono Nerd Font (4 TTFs)
 │   └── …             kitty, alacritty, foot, ghostty, fastfetch, btop,
-│                     cava, yazi, nvim, starship, newsboat, easyeffects, thefuck
+│                     cava, yazi, starship, newsboat, easyeffects, thefuck
 ├── lib/              shared shell helpers (logging, RPM Fusion enable)
 └── setup.sh          master installer (idempotent — safe to re-run)
 ```
