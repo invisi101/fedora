@@ -277,10 +277,13 @@ else
 fi
 
 section "unimatrix"
-if sudo -u "$REAL_USER" HOME="$REAL_HOME" pip3 install --user --quiet unimatrix 2>/dev/null; then
-    ok "unimatrix installed."
+if sudo -u "$REAL_USER" HOME="$REAL_HOME" pipx list 2>/dev/null | grep -q unimatrix; then
+    ok "unimatrix already installed."
 else
-    warn "unimatrix install failed — install manually: pip3 install unimatrix --user"
+    info "Installing unimatrix..."
+    sudo -u "$REAL_USER" HOME="$REAL_HOME" pipx install unimatrix \
+        && ok "unimatrix installed." \
+        || warn "unimatrix install failed — install manually: pipx install unimatrix"
 fi
 
 # ── UFW firewall ──────────────────────────────────────────────────────────────
