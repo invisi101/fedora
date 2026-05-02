@@ -463,6 +463,119 @@ for f in "$SCRIPT_DIR/configs/kitty/"*; do
 done
 ok "kitty config deployed."
 
+section "fastfetch config"
+FF_DIR="$REAL_HOME/.config/fastfetch"
+sudo -u "$REAL_USER" mkdir -p "$FF_DIR"
+for f in "$SCRIPT_DIR/configs/fastfetch/"*; do
+    install -Dm644 "$f" "$FF_DIR/$(basename "$f")"
+    chown "$REAL_USER:$REAL_USER" "$FF_DIR/$(basename "$f")"
+done
+ok "fastfetch config deployed."
+
+section "btop config"
+BTOP_DIR="$REAL_HOME/.config/btop"
+sudo -u "$REAL_USER" mkdir -p "$BTOP_DIR/themes"
+install -Dm644 "$SCRIPT_DIR/configs/btop/btop.conf" "$BTOP_DIR/btop.conf"
+for f in "$SCRIPT_DIR/configs/btop/themes/"*; do
+    install -Dm644 "$f" "$BTOP_DIR/themes/$(basename "$f")"
+done
+chown -R "$REAL_USER:$REAL_USER" "$BTOP_DIR"
+ok "btop config deployed."
+
+section "cava config"
+CAVA_DIR="$REAL_HOME/.config/cava"
+sudo -u "$REAL_USER" mkdir -p "$CAVA_DIR/shaders" "$CAVA_DIR/themes"
+install -Dm644 "$SCRIPT_DIR/configs/cava/config" "$CAVA_DIR/config"
+for f in "$SCRIPT_DIR/configs/cava/shaders/"*; do
+    install -Dm644 "$f" "$CAVA_DIR/shaders/$(basename "$f")"
+done
+for f in "$SCRIPT_DIR/configs/cava/themes/"*; do
+    install -Dm644 "$f" "$CAVA_DIR/themes/$(basename "$f")"
+done
+chown -R "$REAL_USER:$REAL_USER" "$CAVA_DIR"
+ok "cava config deployed."
+
+section "alacritty config"
+ALA_DIR="$REAL_HOME/.config/alacritty"
+sudo -u "$REAL_USER" mkdir -p "$ALA_DIR/themes"
+install -Dm644 "$SCRIPT_DIR/configs/alacritty/alacritty.toml" "$ALA_DIR/alacritty.toml"
+for f in "$SCRIPT_DIR/configs/alacritty/themes/"*; do
+    install -Dm644 "$f" "$ALA_DIR/themes/$(basename "$f")"
+done
+chown -R "$REAL_USER:$REAL_USER" "$ALA_DIR"
+ok "alacritty config deployed."
+
+section "foot config"
+FOOT_DIR="$REAL_HOME/.config/foot"
+sudo -u "$REAL_USER" mkdir -p "$FOOT_DIR/themes"
+for f in "$SCRIPT_DIR/configs/foot/"*.ini; do
+    install -Dm644 "$f" "$FOOT_DIR/$(basename "$f")"
+done
+for f in "$SCRIPT_DIR/configs/foot/themes/"*; do
+    install -Dm644 "$f" "$FOOT_DIR/themes/$(basename "$f")"
+done
+chown -R "$REAL_USER:$REAL_USER" "$FOOT_DIR"
+ok "foot config deployed."
+
+section "ghostty config"
+GHOSTTY_DIR="$REAL_HOME/.config/ghostty"
+sudo -u "$REAL_USER" mkdir -p "$GHOSTTY_DIR/themes"
+install -Dm644 "$SCRIPT_DIR/configs/ghostty/config" "$GHOSTTY_DIR/config"
+for f in "$SCRIPT_DIR/configs/ghostty/themes/"*; do
+    install -Dm644 "$f" "$GHOSTTY_DIR/themes/$(basename "$f")"
+done
+chown -R "$REAL_USER:$REAL_USER" "$GHOSTTY_DIR"
+ok "ghostty config deployed."
+
+section "yazi config"
+YAZI_DIR="$REAL_HOME/.config/yazi"
+sudo -u "$REAL_USER" mkdir -p "$YAZI_DIR/flavors/noctalia.yazi"
+for f in yazi.toml keymap.toml theme.toml; do
+    install -Dm644 "$SCRIPT_DIR/configs/yazi/$f" "$YAZI_DIR/$f"
+done
+for f in "$SCRIPT_DIR/configs/yazi/flavors/noctalia.yazi/"*; do
+    install -Dm644 "$f" "$YAZI_DIR/flavors/noctalia.yazi/$(basename "$f")"
+done
+chown -R "$REAL_USER:$REAL_USER" "$YAZI_DIR"
+ok "yazi config deployed."
+
+section "nvim config"
+NVIM_DIR="$REAL_HOME/.config/nvim/lua/plugins"
+sudo -u "$REAL_USER" mkdir -p "$NVIM_DIR"
+install -Dm644 "$SCRIPT_DIR/configs/nvim/lua/plugins/dankcolors.lua" "$NVIM_DIR/dankcolors.lua"
+chown -R "$REAL_USER:$REAL_USER" "$REAL_HOME/.config/nvim"
+ok "nvim config deployed."
+
+section "starship config"
+install -Dm644 "$SCRIPT_DIR/configs/starship/starship.toml" "$REAL_HOME/.config/starship.toml"
+chown "$REAL_USER:$REAL_USER" "$REAL_HOME/.config/starship.toml"
+ok "starship config deployed."
+
+section "newsboat config"
+NB_DIR="$REAL_HOME/.config/newsboat"
+sudo -u "$REAL_USER" mkdir -p "$NB_DIR"
+for f in config urls; do
+    install -Dm644 "$SCRIPT_DIR/configs/newsboat/$f" "$NB_DIR/$f"
+    chown "$REAL_USER:$REAL_USER" "$NB_DIR/$f"
+done
+ok "newsboat config deployed."
+
+section "easyeffects config"
+EE_DIR="$REAL_HOME/.config/easyeffects/db"
+sudo -u "$REAL_USER" mkdir -p "$EE_DIR"
+for f in "$SCRIPT_DIR/configs/easyeffects/db/"*; do
+    install -Dm644 "$f" "$EE_DIR/$(basename "$f")"
+done
+chown -R "$REAL_USER:$REAL_USER" "$REAL_HOME/.config/easyeffects"
+ok "easyeffects config deployed."
+
+section "thefuck config"
+TF_DIR="$REAL_HOME/.config/thefuck"
+sudo -u "$REAL_USER" mkdir -p "$TF_DIR"
+install -Dm644 "$SCRIPT_DIR/configs/thefuck/settings.py" "$TF_DIR/settings.py"
+chown "$REAL_USER:$REAL_USER" "$TF_DIR/settings.py"
+ok "thefuck config deployed."
+
 section "Terminal: set default shell to zsh"
 CURRENT_SHELL=$(getent passwd "$REAL_USER" | cut -d: -f7)
 if [[ "$CURRENT_SHELL" == "$(command -v zsh)" ]]; then
@@ -519,6 +632,10 @@ for script in runclam.sh url-maintenance.sh pullmygit.sh pushmygit.sh; do
     chown "$REAL_USER:$REAL_USER" "$SCRIPTS_BIN/$base"
 done
 ok "Scripts installed to $SCRIPTS_BIN/"
+
+install -Dm644 "$SCRIPT_DIR/configs/mygitrepos" "$REAL_HOME/.config/mygitrepos"
+chown "$REAL_USER:$REAL_USER" "$REAL_HOME/.config/mygitrepos"
+ok "mygitrepos deployed."
 
 # ── Firefox settings ──────────────────────────────────────────────────────────
 # Interactive — run separately as yourself after Firefox has been opened once.

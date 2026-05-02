@@ -1,0 +1,73 @@
+# 夜の静けさ btop theme
+
+# Main bg
+theme[main_bg]="#1a1520"
+
+# Main fg
+theme[main_fg]="#e8e0f0"
+
+# Title color
+theme[title]="#e8b4b8"
+
+# Highlight color
+theme[hi_fg]="#e8b4b8"
+
+# Selected
+theme[selected_bg]="#2d1f3d"
+theme[selected_fg]="#e8b4b8"
+
+# Inactive
+theme[inactive_fg]="#8a7a9a"
+
+# Process box
+theme[proc_misc]="#c4a0d0"
+
+# Box outline
+theme[cpu_box]="#3d2a54"
+theme[mem_box]="#3d2a54"
+theme[net_box]="#3d2a54"
+theme[proc_box]="#3d2a54"
+
+# Graphs
+theme[cpu_start]="#c4a0d0"
+theme[cpu_mid]="#e8b4b8"
+theme[cpu_end]="#ffdb8a"
+
+theme[free_start]="#d4e4c4"
+theme[free_mid]="#a0c8e8"
+theme[free_end]="#c4a0d0"
+
+theme[cached_start]="#a0c8e8"
+theme[cached_mid]="#c4a0d0"
+theme[cached_end]="#e8b4b8"
+
+theme[available_start]="#d4e4c4"
+theme[available_mid]="#a0c8e8"
+theme[available_end]="#c4a0d0"
+
+theme[used_start]="#c4a0d0"
+theme[used_mid]="#e8b4b8"
+theme[used_end]="#ffdb8a"
+
+theme[download_start]="#a0c8e8"
+theme[download_mid]="#c4a0d0"
+theme[download_end]="#e8b4b8"
+
+theme[upload_start]="#d4e4c4"
+theme[upload_mid]="#a0c8e8"
+theme[upload_end]="#c4a0d0"
+
+theme[process_start]="#c4a0d0"
+theme[process_mid]="#e8b4b8"
+theme[process_end]="#ffdb8a"
+
+# Temp
+theme[temp_start]="#a0c8e8"
+theme[temp_mid]="#ffdb8a"
+theme[temp_end]="#e8b4b8"
+
+# Meter
+theme[meter_bg]="#3d2a54"
+
+# Divider
+theme[div_line]="#3d2a54"
