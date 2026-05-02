@@ -274,13 +274,17 @@ section "UFW firewall"
 systemctl stop firewalld 2>/dev/null || true
 systemctl disable firewalld 2>/dev/null || true
 systemctl enable ufw
-ufw --force reset
-ufw default deny incoming
-ufw default allow outgoing
-ufw allow from 192.168.1.0/24
-ufw --force enable
-ufw logging low
-ok "UFW enabled: deny incoming, allow outgoing, allow LAN (192.168.1.0/24)."
+if ufw status 2>/dev/null | grep -q "Status: active"; then
+    ok "UFW already configured — skipping reset to preserve any custom rules."
+else
+    ufw --force reset
+    ufw default deny incoming
+    ufw default allow outgoing
+    ufw allow from 192.168.1.0/24
+    ufw --force enable
+    ufw logging low
+    ok "UFW enabled: deny incoming, allow outgoing, allow LAN (192.168.1.0/24)."
+fi
 
 # ── MangoWM ───────────────────────────────────────────────────────────────────
 # Terra repo ships mangowm built against scenefx 0.4 + wlroots0.19 (parallel-
