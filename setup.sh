@@ -155,7 +155,7 @@ install_pkgs \
     `# ── Security ──────────────────────────────` \
     ufw firejail lynis rkhunter gitleaks \
     `# ── Dev tools ─────────────────────────────` \
-    git gh jq gum ImageMagick shellcheck cmake meson \
+    git gh jq ImageMagick shellcheck cmake meson \
     `# ── Productivity ──────────────────────────` \
     newsboat transmission-gtk calibre kiwix-desktop gnome-feeds \
     easyeffects rpi-imager \
