@@ -113,6 +113,7 @@ section "COPR repos"
 copr_enable "avengemedia/dms"
 copr_enable "scottames/ghostty"
 copr_enable "the4runner/firefox-dev"
+copr_enable "sneexy/zen-browser"
 
 section "Brave repo"
 if ! dnf repolist --all 2>/dev/null | grep -qi "brave-browser"; then
@@ -142,11 +143,11 @@ install_pkgs \
     `# ── Eye candy ─────────────────────────────` \
     fastfetch btop htop cava cbonsai figlet \
     `# ── File management ───────────────────────` \
-    yazi ncdu fd-find rsync \
+    yazi nautilus ncdu fd-find rsync \
     `# ── Editors ───────────────────────────────` \
     neovim nano mousepad \
     `# ── Browsers ──────────────────────────────` \
-    firefox torbrowser-launcher firefox-dev brave-browser mullvad-browser librewolf \
+    firefox torbrowser-launcher firefox-dev brave-browser mullvad-browser librewolf chromium zen-browser \
     `# ── Media ─────────────────────────────────` \
     mpv \
     `# ── Security ──────────────────────────────` \
@@ -218,7 +219,7 @@ flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.f
 ok "Flathub remote configured."
 
 section "Flatpak apps"
-for app in com.rafaelmardojai.Blanket io.freetubeapp.FreeTube; do
+for app in com.rafaelmardojai.Blanket io.freetubeapp.FreeTube org.standardnotes.standardnotes app.zen_browser.zen; do
     if flatpak list --app | grep -q "$app"; then
         ok "$app already installed."
     else
@@ -226,6 +227,17 @@ for app in com.rafaelmardojai.Blanket io.freetubeapp.FreeTube; do
         flatpak install -y flathub "$app"
     fi
 done
+
+# Wrapper so binds.conf SUPER+N (-> $HOME/.local/bin/standard-notes) works.
+SN_WRAPPER="$REAL_HOME/.local/bin/standard-notes"
+sudo -u "$REAL_USER" mkdir -p "$REAL_HOME/.local/bin"
+cat > "$SN_WRAPPER" <<'EOF'
+#!/bin/sh
+exec flatpak run org.standardnotes.standardnotes "$@"
+EOF
+chmod 755 "$SN_WRAPPER"
+chown "$REAL_USER:$REAL_USER" "$SN_WRAPPER"
+ok "standard-notes wrapper deployed."
 
 # ── Starship prompt ───────────────────────────────────────────────────────────
 
