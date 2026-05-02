@@ -8,8 +8,8 @@ BIN_DIR="$HOME/.local/bin"
 echo "=== LipCord Installer ==="
 echo
 
-# Install tkinter if needed
-if ! python3 -c "import tkinter" 2>/dev/null; then
+# Install tkinter if needed (skipped under setup.sh which pre-installs it).
+if [[ -z "${FEDORA_SETUP:-}" ]] && ! python3 -c "import tkinter" 2>/dev/null; then
     echo "[*] Installing tkinter (required for the GUI)..."
     if command -v pacman &>/dev/null; then
         sudo pacman -S --noconfirm tk

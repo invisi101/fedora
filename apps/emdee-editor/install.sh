@@ -21,7 +21,7 @@ install_deps() {
     fi
 }
 
-install_deps
+[[ -z "${FEDORA_SETUP:-}" ]] && install_deps
 
 # Install the app
 sudo install -Dm755 emdee-editor.py /usr/local/bin/emdee-editor

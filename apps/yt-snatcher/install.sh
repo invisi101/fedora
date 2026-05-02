@@ -32,8 +32,10 @@ install_deps() {
     fi
 }
 
-echo "Checking dependencies..."
-install_deps
+if [[ -z "${FEDORA_SETUP:-}" ]]; then
+    echo "Checking dependencies..."
+    install_deps
+fi
 
 # Install script
 mkdir -p "$BIN_DIR"

@@ -63,15 +63,17 @@ repo_add() {
 }
 
 # Run a subshell as REAL_USER in a given app directory (user-space installs).
+# FEDORA_SETUP=1 tells the app's install.sh to skip its own dep install
+# (we install all deps centrally in setup.sh, no inner sudo prompt needed).
 run_as_user() {
     local app_dir="$1"
-    (cd "$app_dir" && sudo -u "$REAL_USER" HOME="$REAL_HOME" bash install.sh)
+    (cd "$app_dir" && sudo -u "$REAL_USER" HOME="$REAL_HOME" FEDORA_SETUP=1 bash install.sh)
 }
 
 # Run a subshell as root in a given app directory with HOME set to real user's home.
 run_as_root() {
     local app_dir="$1"
-    (cd "$app_dir" && HOME="$REAL_HOME" bash install.sh)
+    (cd "$app_dir" && HOME="$REAL_HOME" FEDORA_SETUP=1 bash install.sh)
 }
 
 # Deploy a config file, expanding $HOME to REAL_HOME via envsubst.

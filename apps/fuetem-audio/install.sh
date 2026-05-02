@@ -118,21 +118,23 @@ install_deps() {
 echo "Checking dependencies…"
 check_python
 
-missing=( $(missing_deps) )
+if [[ -z "${FEDORA_SETUP:-}" ]]; then
+    missing=( $(missing_deps) )
 
-if [ ${#missing[@]} -gt 0 ]; then
-    echo ""
-    echo "Missing dependencies: ${missing[*]}"
-    read -rp "Install them now? [Y/n] " answer
-    answer=${answer:-Y}
-    if [[ "$answer" =~ ^[Yy]$ ]]; then
-        install_deps "${missing[@]}"
+    if [ ${#missing[@]} -gt 0 ]; then
+        echo ""
+        echo "Missing dependencies: ${missing[*]}"
+        read -rp "Install them now? [Y/n] " answer
+        answer=${answer:-Y}
+        if [[ "$answer" =~ ^[Yy]$ ]]; then
+            install_deps "${missing[@]}"
+        else
+            echo "Aborted. Install the missing dependencies and re-run."
+            exit 1
+        fi
     else
-        echo "Aborted. Install the missing dependencies and re-run."
-        exit 1
+        echo "All dependencies satisfied."
     fi
-else
-    echo "All dependencies satisfied."
 fi
 
 # ---------------------------------------------------------------------------

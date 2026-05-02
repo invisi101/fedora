@@ -111,12 +111,14 @@ install_deps_fedora() {
     fi
 }
 
-info "Checking dependencies..."
-case "$DISTRO" in
-    arch)   install_deps_arch   ;;
-    debian) install_deps_debian ;;
-    fedora) install_deps_fedora ;;
-esac
+if [[ -z "${FEDORA_SETUP:-}" ]]; then
+    info "Checking dependencies..."
+    case "$DISTRO" in
+        arch)   install_deps_arch   ;;
+        debian) install_deps_debian ;;
+        fedora) install_deps_fedora ;;
+    esac
+fi
 
 # ── Install application ─────────────────────────────────────────────────────
 
