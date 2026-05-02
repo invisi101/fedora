@@ -215,14 +215,21 @@ up() {
 
 # IP address lookup
 alias whatismyip="whatsmyip"
+# Detect the active wifi interface via NetworkManager (Fedora uses wlpXsY,
+# not wlan0). Falls back to the first wifi device known to NM.
+_wifi_iface() {
+    nmcli -t -f DEVICE,TYPE,STATE device 2>/dev/null \
+        | awk -F: '$2=="wifi" && $3=="connected" {print $1; exit}'
+}
 whatsmyip() {
-    if command -v ip &>/dev/null; then
-        echo -n "Internal IP: "
-        ip addr show wlan0 | grep "inet " | awk '{print $2}' | cut -d/ -f1
-    else
-        echo -n "Internal IP: "
-        ifconfig wlan0 | grep "inet " | awk '{print $2}'
+    local iface
+    iface=$(_wifi_iface)
+    if [[ -z "$iface" ]]; then
+        echo "No connected wifi interface found."
+        return 1
     fi
+    echo -n "Internal IP ($iface): "
+    ip addr show "$iface" | grep "inet " | awk '{print $2}' | cut -d/ -f1
     echo -n "External IP: "
     curl -4 ifconfig.me
 }
@@ -283,12 +290,24 @@ localoff() {
 }
 
 mineon() {
-    sudo ufw allow in on wlan0 from 192.168.3.0/24 to any
+    local iface
+    iface=$(_wifi_iface)
+    if [[ -z "$iface" ]]; then
+        echo "No connected wifi interface found."
+        return 1
+    fi
+    sudo ufw allow in on "$iface" from 192.168.3.0/24 to any
     sudo ufw status numbered
 }
 
 mineoff() {
-    sudo ufw delete allow in on wlan0 from 192.168.3.0/24 to any || true
+    local iface
+    iface=$(_wifi_iface)
+    if [[ -z "$iface" ]]; then
+        echo "No connected wifi interface found."
+        return 1
+    fi
+    sudo ufw delete allow in on "$iface" from 192.168.3.0/24 to any || true
     sudo ufw status numbered
 }
 
