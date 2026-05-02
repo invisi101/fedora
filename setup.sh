@@ -115,7 +115,6 @@ section "COPR repos"
 copr_enable "avengemedia/dms"
 copr_enable "scottames/ghostty"
 copr_enable "the4runner/firefox-dev"
-copr_enable "sneexy/zen-browser"
 
 section "Brave repo"
 if ! dnf repolist --all 2>/dev/null | grep -qi "brave-browser"; then
@@ -149,7 +148,7 @@ install_pkgs \
     `# ── Editors ───────────────────────────────` \
     neovim nano mousepad \
     `# ── Browsers ──────────────────────────────` \
-    firefox torbrowser-launcher firefox-dev brave-browser mullvad-browser librewolf chromium zen-browser \
+    firefox torbrowser-launcher firefox-dev brave-browser mullvad-browser librewolf chromium \
     `# ── Media ─────────────────────────────────` \
     mpv \
     `# ── Security ──────────────────────────────` \
@@ -211,7 +210,7 @@ flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.f
 ok "Flathub remote configured."
 
 section "Flatpak apps"
-for app in com.rafaelmardojai.Blanket io.freetubeapp.FreeTube org.standardnotes.standardnotes app.zen_browser.zen; do
+for app in com.rafaelmardojai.Blanket io.freetubeapp.FreeTube org.standardnotes.standardnotes; do
     if flatpak list --app | grep -q "$app"; then
         ok "$app already installed."
     else
