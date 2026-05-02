@@ -114,7 +114,6 @@ fi
 section "COPR repos"
 copr_enable "avengemedia/dms"
 copr_enable "scottames/ghostty"
-copr_enable "the4runner/firefox-dev"
 
 section "Brave repo"
 if ! dnf repolist --all 2>/dev/null | grep -qi "brave-browser"; then
@@ -125,12 +124,6 @@ if ! dnf repolist --all 2>/dev/null | grep -qi "brave-browser"; then
 else
     ok "Brave repo already present."
 fi
-
-section "Mullvad repo"
-repo_add "mullvad" "https://repository.mullvad.net/rpm/stable/mullvad.repo"
-
-section "LibreWolf repo"
-repo_add "librewolf" "https://repo.librewolf.net/librewolf.repo"
 
 # ── Standard packages ─────────────────────────────────────────────────────────
 
@@ -148,7 +141,7 @@ install_pkgs \
     `# ── Editors ───────────────────────────────` \
     neovim nano mousepad \
     `# ── Browsers ──────────────────────────────` \
-    firefox torbrowser-launcher firefox-dev brave-browser mullvad-browser librewolf chromium \
+    firefox torbrowser-launcher brave-browser \
     `# ── Media ─────────────────────────────────` \
     mpv \
     `# ── Security ──────────────────────────────` \
