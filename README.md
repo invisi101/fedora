@@ -9,8 +9,8 @@ configured MangoWM + DankMaterialShell desktop in one command.
   Brave, Mullvad, and LibreWolf repos
 - Installs ~150 packages (terminals, browsers, security tools, dev tools,
   WM runtime, fonts, audio stack)
-- Builds and installs scenefx 0.4.1 + MangoWM from source
-- Installs DankMaterialShell (DMS)
+- Installs MangoWM from Terra (already built against scenefx 0.4 + wlroots 0.19)
+- Installs DankMaterialShell (DMS) from the avengemedia/dms COPR
 - Configures UFW (replaces firewalld), Flatpak + Flathub
 - Deploys configs for: mango, kitty, alacritty, foot, ghostty, fastfetch,
   btop, cava, yazi, nvim, starship, newsboat, easyeffects, thefuck, zsh
@@ -50,7 +50,7 @@ environment needed — this script provides one.
    cd fedora
    ```
 
-5. **Run the installer** (takes 20–40 min depending on network/CPU):
+5. **Run the installer** (takes ~10–20 min depending on network):
    ```sh
    sudo bash setup.sh
    ```

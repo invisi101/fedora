@@ -191,22 +191,12 @@ install_pkgs \
 section "RPM Fusion packages"
 install_pkgs ffmpeg gstreamer1-libav ntfs-3g
 
-# ── Development Tools group ───────────────────────────────────────────────────
+# ── Graphics runtime ──────────────────────────────────────────────────────────
+# Most graphics libs come in via mangowm + xdg-desktop-portal; mesa-dri-drivers
+# is the one we want explicit so hardware accel works on first boot.
 
-section "Development Tools"
-dnf group install -y "Development Tools" || warn "Development Tools group install failed — continuing."
-
-# ── WM build dependencies ─────────────────────────────────────────────────────
-
-section "WM build dependencies"
-install_pkgs \
-    ninja-build pkgconf-pkg-config \
-    wayland-devel wayland-protocols-devel \
-    wlroots-devel \
-    libinput-devel libxkbcommon-devel pixman-devel \
-    libdrm-devel libdisplay-info-devel libliftoff-devel \
-    mesa-libEGL-devel mesa-libGL-devel mesa-dri-drivers \
-    pcre2-devel hwdata systemd-devel
+section "Graphics runtime"
+install_pkgs mesa-dri-drivers
 
 # ── Font cache ────────────────────────────────────────────────────────────────
 
@@ -300,49 +290,12 @@ ufw --force enable
 ufw logging low
 ok "UFW enabled: deny incoming, allow outgoing, allow LAN (192.168.1.0/24)."
 
-# ── Build scenefx ─────────────────────────────────────────────────────────────
+# ── MangoWM ───────────────────────────────────────────────────────────────────
+# Terra repo ships mangowm built against scenefx 0.4 + wlroots0.19 (parallel-
+# installed alongside Fedora's wlroots 0.20). RPM auto-pulls runtime deps.
 
-section "Building scenefx 0.4.1"
-SRC_DIR="$REAL_HOME/src"
-sudo -u "$REAL_USER" mkdir -p "$SRC_DIR"
-
-if pkg-config --exists scenefx 2>/dev/null; then
-    ok "scenefx already installed."
-else
-    if [[ ! -d "$SRC_DIR/scenefx" ]]; then
-        info "Cloning scenefx 0.4.1..."
-        sudo -u "$REAL_USER" git clone -b 0.4.1 \
-            https://github.com/wlrfx/scenefx.git "$SRC_DIR/scenefx"
-    fi
-    info "Building scenefx..."
-    sudo -u "$REAL_USER" HOME="$REAL_HOME" \
-        meson setup "$SRC_DIR/scenefx/build" "$SRC_DIR/scenefx" --prefix=/usr
-    sudo -u "$REAL_USER" HOME="$REAL_HOME" \
-        ninja -C "$SRC_DIR/scenefx/build"
-    ninja -C "$SRC_DIR/scenefx/build" install
-    ok "scenefx installed."
-fi
-
-# ── Build MangoWM ─────────────────────────────────────────────────────────────
-
-section "Building MangoWM"
-
-if command -v mango &>/dev/null; then
-    ok "MangoWM already installed."
-else
-    if [[ ! -d "$SRC_DIR/mango" ]]; then
-        info "Cloning MangoWM..."
-        sudo -u "$REAL_USER" git clone \
-            https://github.com/mangowm/mango.git "$SRC_DIR/mango"
-    fi
-    info "Building MangoWM..."
-    sudo -u "$REAL_USER" HOME="$REAL_HOME" \
-        meson setup "$SRC_DIR/mango/build" "$SRC_DIR/mango" --prefix=/usr
-    sudo -u "$REAL_USER" HOME="$REAL_HOME" \
-        ninja -C "$SRC_DIR/mango/build"
-    ninja -C "$SRC_DIR/mango/build" install
-    ok "MangoWM installed."
-fi
+section "MangoWM"
+install_pkgs mangowm
 
 # ── DMS (DankMaterialShell) ───────────────────────────────────────────────────
 
