@@ -158,7 +158,7 @@ install_pkgs \
     git gh jq gum ImageMagick shellcheck cmake meson \
     `# ── Productivity ──────────────────────────` \
     newsboat transmission-gtk calibre kiwix-desktop gnome-feeds \
-    easyeffects stacer rpi-imager \
+    easyeffects rpi-imager \
     `# ── Python ────────────────────────────────` \
     python3 python3-pip pipx \
     python3-gobject python3-tkinter python3-pillow \
