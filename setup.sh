@@ -131,13 +131,13 @@ section "Standard packages"
 
 install_pkgs \
     `# ── Terminal / shell ──────────────────────` \
-    zsh fish tmux bash-completion \
+    zsh fish tmux \
     `# ── Terminal emulators ────────────────────` \
     kitty alacritty foot ghostty \
     `# ── Eye candy ─────────────────────────────` \
     fastfetch btop htop cava cbonsai figlet \
     `# ── File management ───────────────────────` \
-    yazi nautilus ncdu fd-find rsync \
+    yazi nautilus ncdu fd-find \
     `# ── Editors ───────────────────────────────` \
     nano mousepad \
     `# ── Browsers ──────────────────────────────` \
@@ -169,21 +169,21 @@ install_pkgs \
     wireplumber pipewire pipewire-alsa pipewire-jack pipewire-pulse \
     gnome-keyring \
     `# ── Shell tools ───────────────────────────` \
-    eza bat fzf zoxide thefuck trash-cli ripgrep multitail net-tools \
+    eza bat fzf zoxide thefuck trash-cli ripgrep multitail \
     `# ── GTK / app dependencies ────────────────` \
     gtk3 gtk4 libadwaita webkit2gtk4.1 gtksourceview4 \
     qt5-qtmultimedia gstreamer1-plugins-good \
     `# ── Disk / filesystem ─────────────────────` \
-    udisks2 parted dosfstools exfatprogs \
+    udisks2 \
     `# ── Misc ──────────────────────────────────` \
     mat2 perl-Image-ExifTool yt-dlp dejavu-sans-fonts \
-    clamav clamav-update sqlite zip unzip curl zenity
+    clamav clamav-update sqlite zenity
 
 # ── RPM Fusion packages ───────────────────────────────────────────────────────
-# ffmpeg, gstreamer1-libav, ntfs-3g are not in Fedora's default repos.
+# ffmpeg and gstreamer1-libav need RPM Fusion (codec licensing).
 
 section "RPM Fusion packages"
-install_pkgs ffmpeg gstreamer1-libav ntfs-3g
+install_pkgs ffmpeg gstreamer1-libav
 
 # ── Graphics runtime ──────────────────────────────────────────────────────────
 # Most graphics libs come in via mangowm + xdg-desktop-portal; mesa-dri-drivers
