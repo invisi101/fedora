@@ -111,6 +111,18 @@ else
     ok "Terra repo already present."
 fi
 
+# Pin Terra to lower priority than Fedora's repos (default 99 = highest;
+# higher number = lower priority). Keeps Fedora packages winning on
+# conflicts so Terra only fills gaps (mangowm, scenefx) rather than
+# silently shadowing system packages on dnf upgrade.
+for f in /etc/yum.repos.d/terra*.repo; do
+    [[ -f "$f" ]] || continue
+    if ! grep -q '^priority=' "$f"; then
+        sed -i '/^\[/a priority=200' "$f"
+        info "Set priority=200 on $(basename "$f")."
+    fi
+done
+
 section "COPR repos"
 copr_enable "avengemedia/dms"
 copr_enable "scottames/ghostty"
